@@ -37,8 +37,8 @@ type
 
 var
   Form1: TForm1;
-  bitmapR, bitmapG, bitmapB : array [0..2000, 0..2000] of byte;
-  defaultBrightnessR, defaultBrightnessG, defaultBrightnessB : array [0..2000, 0..2000] of byte;
+  bitmapR, bitmapG, bitmapB : array [0..2000, 0..2000] of integer;
+  defaultBrightnessR, defaultBrightnessG, defaultBrightnessB : array [0..2000, 0..2000] of integer;
 
 implementation
 
@@ -59,6 +59,9 @@ begin
     begin
       for x:=0 to image1.Width-1 do
       begin
+        bitmapR[x,y] := defaultBrightnessR[x,y];
+        bitmapG[x,y] := defaultBrightnessG[x,y];
+        bitmapB[x,y] := defaultBrightnessB[x,y];
         image1.Canvas.Pixels[x,y] := RGB(defaultBrightnessR[x,y], defaultBrightnessG[x,y], defaultBrightnessB[x,y]);
       end;
     end;
@@ -87,9 +90,9 @@ begin
       bitmapB[x,y] := Trunc(bitmapB[x,y] + (defaultBrightnessB[x,y] * TrackBarBrightness.Position/100));
 
       //Pake ternary operator supaya nilainya ga negatif dan ga lebih dari 255 (Willy)
-      bitmapR[x,y] := IfThen(bitmapR[x,y] < 0, 0, bitmapR[x,y] mod 255);
-      bitmapG[x,y] := IfThen(bitmapG[x,y] < 0, 0, bitmapG[x,y] mod 255);
-      bitmapB[x,y] := IfThen(bitmapB[x,y] < 0, 0, bitmapB[x,y] mod 255);
+      bitmapR[x,y] := IfThen(bitmapR[x,y] < 0, 0, IfThen(bitmapR[x,y] > 255, 255, bitmapR[x,y]));
+      bitmapG[x,y] := IfThen(bitmapG[x,y] < 0, 0, IfThen(bitmapG[x,y] > 255, 255, bitmapG[x,y]));
+      bitmapB[x,y] := IfThen(bitmapB[x,y] < 0, 0, IfThen(bitmapB[x,y] > 255, 255, bitmapB[x,y]));
 
       image1.Canvas.Pixels[x,y] := RGB(bitmapR[x,y], bitmapG[x,y], bitmapB[x,y]);
     end;
