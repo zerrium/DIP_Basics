@@ -14,7 +14,7 @@ Developed using Lazarus IDE 2.0.10 on Windows
 * Choose local path destination and click Clone button
 * Open the folder directory and double click the ```.lpi``` file to open the project
 ### Part 2: Contributing
-* Keep the GitHub Desktop app opened, make sure to do Fetch Origin to sync your Lazarus project with this repository before doing anything
+* Keep the GitHub Desktop app opened, make sure to do Fetch Origin (then hit the Pull origin button) to sync your Lazarus project with this repository before doing anything
 * The app will detect any change to the project (when you hit Ctrl + S) and be sure to <b>commit</b> (hit the Commit to master button) and do Push origin
 * Commit every change you made on the project to control what you did to the project
 
