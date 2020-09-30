@@ -1,9 +1,10 @@
 object Form1: TForm1
-  Left = 316
-  Height = 300
-  Top = 171
-  Width = 400
+  Left = 408
+  Height = 444
+  Top = 194
+  Width = 673
   Caption = 'Form1'
   DesignTimePPI = 120
+  OnCreate = FormCreate
   LCLVersion = '2.0.10.0'
 end

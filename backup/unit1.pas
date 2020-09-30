@@ -8,7 +8,11 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs;
 
 type
+
+  { TForm1 }
+
   TForm1 = class(TForm)
+    procedure FormCreate(Sender: TObject);
   private
 
   public
@@ -20,7 +24,14 @@ var
 
 implementation
 
-{$R *.lfm}      aaaaaaaaaaaaaa
+{$R *.lfm}
+
+{ TForm1 }
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+
+end;
 
 end.
 
