@@ -25,7 +25,6 @@ type
     SavePictureDialog1: TSavePictureDialog;
     TrackBarBrightness: TTrackBar;
     procedure loadButtonClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure resetBrightnessButtonClick(Sender: TObject);
     procedure saveButtonClick(Sender: TObject);
     procedure TrackBarBrightnessChange(Sender: TObject);
@@ -37,8 +36,9 @@ type
 
 var
   Form1: TForm1;
-  bitmapR, bitmapG, bitmapB : array [0..2000, 0..2000] of integer;
-  defaultBrightnessR, defaultBrightnessG, defaultBrightnessB : array [0..2000, 0..2000] of integer;
+  bitmapR, bitmapG, bitmapB : array [0..1000, 0..1000] of Byte; //variabel untuk gambar yang default belom dimanipulasi
+  manipR, manipG, manipB : array [0..1000, 0..1000] of Byte; //variabel untuk gambar yang termanipulasi
+  defaultBrightnessR, defaultBrightnessG, defaultBrightnessB : array [0..2000, 0..2000] of Byte; //variabel untuk default brightness
 
 implementation
 
@@ -46,12 +46,7 @@ implementation
 
 { TForm1 }
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-
-end;
-
-procedure TForm1.resetBrightnessButtonClick(Sender: TObject);
+procedure TForm1.resetBrightnessButtonClick(Sender: TObject); //kembaliin gambar ke brightness semula
 var
   x,y : integer;
 begin
@@ -59,16 +54,13 @@ begin
     begin
       for x:=0 to image1.Width-1 do
       begin
-        bitmapR[x,y] := defaultBrightnessR[x,y];
-        bitmapG[x,y] := defaultBrightnessG[x,y];
-        bitmapB[x,y] := defaultBrightnessB[x,y];
         image1.Canvas.Pixels[x,y] := RGB(defaultBrightnessR[x,y], defaultBrightnessG[x,y], defaultBrightnessB[x,y]);
       end;
     end;
   TrackBarBrightness.Position := 0;
 end;
 
-procedure TForm1.saveButtonClick(Sender: TObject);
+procedure TForm1.saveButtonClick(Sender: TObject); //save gambar yang udah dimanipulasi
 begin
   if SavePictureDialog1.Execute then
   begin
@@ -76,31 +68,31 @@ begin
   end;
 end;
 
-procedure TForm1.TrackBarBrightnessChange(Sender: TObject);
+procedure TForm1.TrackBarBrightnessChange(Sender: TObject); //adjust brightness gambar
 var
-   x, y: integer;
+   x, y, brightnessR, brightnessG, brightnessB: integer;
 begin
   TrackBarBrightness.Enabled := False;
   for y:=0 to image1.Height-1 do
   begin
     for x:=0 to image1.Width-1 do
     begin
-      bitmapR[x,y] := Trunc(bitmapR[x,y] + (defaultBrightnessR[x,y] * TrackBarBrightness.Position/100));
-      bitmapG[x,y] := Trunc(bitmapG[x,y] + (defaultBrightnessG[x,y] * TrackBarBrightness.Position/100));
-      bitmapB[x,y] := Trunc(bitmapB[x,y] + (defaultBrightnessB[x,y] * TrackBarBrightness.Position/100));
+      brightnessR := Trunc(defaultBrightnessR[x,y] + (defaultBrightnessR[x,y] * TrackBarBrightness.Position/100));
+      brightnessG := Trunc(defaultBrightnessG[x,y] + (defaultBrightnessG[x,y] * TrackBarBrightness.Position/100));
+      brightnessB := Trunc(defaultBrightnessB[x,y] + (defaultBrightnessB[x,y] * TrackBarBrightness.Position/100));
 
       //Pake ternary operator supaya nilainya ga negatif dan ga lebih dari 255 (Willy)
-      bitmapR[x,y] := IfThen(bitmapR[x,y] < 0, 0, IfThen(bitmapR[x,y] > 255, 255, bitmapR[x,y]));
-      bitmapG[x,y] := IfThen(bitmapG[x,y] < 0, 0, IfThen(bitmapG[x,y] > 255, 255, bitmapG[x,y]));
-      bitmapB[x,y] := IfThen(bitmapB[x,y] < 0, 0, IfThen(bitmapB[x,y] > 255, 255, bitmapB[x,y]));
+      manipR[x,y] := IfThen(brightnessR < 0, 0, IfThen(brightnessR > 255, 255, brightnessR));
+      manipG[x,y] := IfThen(brightnessG < 0, 0, IfThen(brightnessG > 255, 255, brightnessG));
+      manipB[x,y] := IfThen(brightnessB < 0, 0, IfThen(brightnessB > 255, 255, brightnessB));
 
-      image1.Canvas.Pixels[x,y] := RGB(bitmapR[x,y], bitmapG[x,y], bitmapB[x,y]);
+      image1.Canvas.Pixels[x,y] := RGB(manipR[x,y], manipG[x,y], manipB[x,y]);
     end;
   end;
   TrackBarBrightness.Enabled := True;
 end;
 
-procedure TForm1.loadButtonClick(Sender: TObject);
+procedure TForm1.loadButtonClick(Sender: TObject); //load gambar
 var
     x, y : integer;
 begin
