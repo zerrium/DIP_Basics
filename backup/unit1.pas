@@ -14,6 +14,8 @@ type
 
   TForm1 = class(TForm)
     brightnessLabel: TLabel;
+    ButtonInvers: TButton;
+    ButtonSmooth: TButton;
     resetBrightnessButton: TButton;
     Label1: TLabel;
     Label2: TLabel;
@@ -24,6 +26,8 @@ type
     Image1: TImage;
     SavePictureDialog1: TSavePictureDialog;
     TrackBarBrightness: TTrackBar;
+    procedure ButtonInversClick(Sender: TObject);
+    procedure ButtonSmoothClick(Sender: TObject);
     procedure loadButtonClick(Sender: TObject);
     procedure resetBrightnessButtonClick(Sender: TObject);
     procedure saveButtonClick(Sender: TObject);
@@ -109,9 +113,41 @@ begin
           defaultBrightnessR[x,y] := bitmapR[x,y];
           defaultBrightnessG[x,y] := bitmapG[x,y];
           defaultBrightnessB[x,y] := bitmapB[x,y];
+
+
         end;
       end;
     end;
+end;
+
+procedure TForm1.ButtonSmoothClick(Sender: TObject);
+var
+  x, y  : integer;
+  gausR, gausG, gausB : double;
+begin
+  for y:= 0 to image1.height-1 do
+  begin
+   for x:= 0 to image1.width-1 do
+   begin
+    gausR := (bitmapR[x-1][y-1] * 0.075) + (bitmapR[x][y-1] * 0.124) + (bitmapR[x+1][y-1] * 0.075)
+              + (bitmapR[x-1][y] * 0.075) + (bitmapR[x][y] * 0.124) + (bitmapR[x+1][y] * 0.075)
+              + (bitmapR[x-1][y+1] * 0.075) + (bitmapR[x][y+1] * 0.124) + (bitmapR[x+1][y+1] * 0.075);
+    gausG := (bitmapG[x-1][y-1] * 0.075) + (bitmapG[x][y-1] * 0.124) + (bitmapG[x+1][y-1] * 0.075)
+              + (bitmapG[x-1][y] * 0.075) + (bitmapG[x][y] * 0.124) + (bitmapG[x+1][y] * 0.075)
+              + (bitmapG[x-1][y+1] * 0.075) + (bitmapG[x][y+1] * 0.124) + (bitmapG[x+1][y+1] * 0.075);
+    gausB := (bitmapB[x-1][y-1] * 0.075) + (bitmapB[x][y-1] * 0.124) + (bitmapB[x+1][y-1] * 0.075)
+              + (bitmapB[x-1][y] * 0.075) + (bitmapB[x][y] * 0.124) + (bitmapB[x+1][y] * 0.075)
+              + (bitmapB[x-1][y+1] * 0.075) + (bitmapB[x][y+1] * 0.124) + (bitmapB[x+1][y+1] * 0.075);
+
+    image1.Canvas.Pixels[x,y] := RGB(Trunc(gausR), Trunc(gausG), Trunc(gausB));
+   end;
+  end;
+
+end;
+
+procedure TForm1.ButtonInversClick(Sender: TObject);
+begin
+
 end;
 
 end.

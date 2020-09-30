@@ -1,28 +1,27 @@
 object Form1: TForm1
-  Left = 515
-  Height = 573
-  Top = 226
-  Width = 817
+  Left = 1149
+  Height = 458
+  Top = 73
+  Width = 654
   Caption = 'Form1'
-  ClientHeight = 573
-  ClientWidth = 817
-  DesignTimePPI = 120
-  LCLVersion = '2.0.10.0'
+  ClientHeight = 458
+  ClientWidth = 654
+  LCLVersion = '2.0.6.0'
   object Image1: TImage
-    Left = 10
-    Height = 310
-    Top = 10
-    Width = 654
+    Left = 8
+    Height = 248
+    Top = 8
+    Width = 523
   end
   object loadButton: TButton
-    Left = 672
-    Height = 64
-    Top = 64
-    Width = 136
+    Left = 538
+    Height = 51
+    Top = 51
+    Width = 109
     Caption = 'Load Image'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -20
+    Font.Height = -16
     Font.Name = 'Segoe UI'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
@@ -31,14 +30,14 @@ object Form1: TForm1
     TabOrder = 0
   end
   object saveButton: TButton
-    Left = 672
-    Height = 64
-    Top = 192
-    Width = 136
+    Left = 538
+    Height = 51
+    Top = 154
+    Width = 109
     Caption = 'Save Image'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -20
+    Font.Height = -16
     Font.Name = 'Segoe UI'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
@@ -47,27 +46,28 @@ object Form1: TForm1
     TabOrder = 1
   end
   object TrackBarBrightness: TTrackBar
-    Left = 10
-    Height = 31
-    Top = 384
-    Width = 354
+    Left = 8
+    Height = 25
+    Top = 307
+    Width = 283
     LineSize = 5
     Max = 100
     Min = -100
     OnChange = TrackBarBrightnessChange
     PageSize = 10
     Position = 0
+    ParentFont = False
     TabOrder = 2
   end
   object brightnessLabel: TLabel
-    Left = 24
-    Height = 31
-    Top = 344
-    Width = 180
+    Left = 19
+    Height = 25
+    Top = 275
+    Width = 139
     Caption = 'Adjust brightness'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -23
+    Font.Height = -18
     Font.Name = 'Segoe UI'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
@@ -75,44 +75,67 @@ object Form1: TForm1
     ParentFont = False
   end
   object Label1: TLabel
-    Left = 176
-    Height = 20
-    Top = 416
-    Width = 20
+    Left = 141
+    Height = 15
+    Top = 333
+    Width = 16
     Caption = '0%'
     ParentColor = False
+    ParentFont = False
   end
   object Label2: TLabel
-    Left = 328
-    Height = 20
-    Top = 416
-    Width = 46
+    Left = 262
+    Height = 15
+    Top = 333
+    Width = 36
     Caption = '+100%'
     ParentColor = False
+    ParentFont = False
   end
   object Label3: TLabel
-    Left = 10
-    Height = 20
-    Top = 416
-    Width = 42
+    Left = 8
+    Height = 15
+    Top = 333
+    Width = 33
     Caption = '-100%'
     ParentColor = False
+    ParentFont = False
   end
   object resetBrightnessButton: TButton
-    Left = 222
-    Height = 31
-    Top = 344
-    Width = 142
+    Left = 178
+    Height = 25
+    Top = 275
+    Width = 114
     Caption = 'Reset Brightness'
     OnClick = resetBrightnessButtonClick
+    ParentFont = False
     TabOrder = 3
   end
+  object ButtonSmooth: TButton
+    Left = 19
+    Height = 44
+    Top = 396
+    Width = 118
+    Caption = 'Smooth'
+    OnClick = ButtonSmoothClick
+    TabOrder = 4
+  end
+  object ButtonInvers: TButton
+    Left = 154
+    Height = 43
+    Top = 397
+    Width = 125
+    Caption = 'Invers'
+    Color = clScrollBar
+    OnClick = ButtonInversClick
+    TabOrder = 5
+  end
   object OpenPictureDialog1: TOpenPictureDialog
-    Left = 712
-    Top = 16
+    left = 570
+    top = 13
   end
   object SavePictureDialog1: TSavePictureDialog
-    Left = 712
-    Top = 264
+    left = 570
+    top = 211
   end
 end
