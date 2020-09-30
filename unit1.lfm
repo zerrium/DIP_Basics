@@ -30,6 +30,15 @@ object Form1: TForm1
     Top = 192
     Width = 112
     Caption = 'Save Image'
+    OnClick = saveButtonClick
     TabOrder = 1
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 712
+    Top = 16
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 712
+    Top = 264
   end
 end
