@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 712
+  Left = 745
   Height = 572
-  Top = 147
+  Top = 151
   Width = 818
   Caption = 'Form1'
   ClientHeight = 572
@@ -129,9 +129,9 @@ object Form1: TForm1
     TabOrder = 4
   end
   object ButtonInvers: TButton
-    Left = 192
+    Left = 368
     Height = 54
-    Top = 496
+    Top = 495
     Width = 156
     Caption = 'Invers'
     Color = clScrollBar
@@ -160,6 +160,22 @@ object Form1: TForm1
     OnClick = resetButtonClick
     ParentFont = False
     TabOrder = 6
+  end
+  object sharpenButton: TButton
+    Left = 192
+    Height = 55
+    Top = 494
+    Width = 156
+    Caption = 'Sharpen'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -20
+    Font.Name = 'Segoe UI'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = sharpenButtonClick
+    ParentFont = False
+    TabOrder = 7
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 624

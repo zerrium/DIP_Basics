@@ -14,6 +14,7 @@ type
 
   TForm1 = class(TForm)
     brightnessLabel: TLabel;
+    sharpenButton: TButton;
     resetButton: TButton;
     ButtonInvers: TButton;
     ButtonSmooth: TButton;
@@ -33,6 +34,7 @@ type
     procedure resetBrightnessButtonClick(Sender: TObject);
     procedure resetButtonClick(Sender: TObject);
     procedure saveButtonClick(Sender: TObject);
+    procedure sharpenButtonClick(Sender: TObject);
     procedure TrackBarBrightnessChange(Sender: TObject);
   private
 
@@ -94,6 +96,41 @@ begin
   if SavePictureDialog1.Execute then
   begin
     image1.Picture.SaveToFile(SavePictureDialog1.FileName);
+  end;
+end;
+
+procedure TForm1.sharpenButtonClick(Sender: TObject);
+var
+  x, y  : integer;
+  sharpR, sharpG, sharpB : double;
+begin
+  for y:= 0 to image1.height-1 do
+  begin
+   for x:= 0 to image1.width-1 do
+   begin
+    sharpR := (manipR[x-1][y-1] * (-0.1)) + (manipR[x][y-1] * (-0.1)) + (manipR[x+1][y-1] * (-0.1))
+              + (manipR[x-1][y] * (-0.1)) + (manipR[x][y] * 1.8) + (manipR[x+1][y] * (-0.1))
+              + (manipR[x-1][y+1] * (-0.1)) + (manipR[x][y+1] * (-0.1)) + (manipR[x+1][y+1] * (-0.1));
+    sharpG := (manipG[x-1][y-1] * (-0.1)) + (manipG[x][y-1] * (-0.1)) + (manipG[x+1][y-1] * (-0.1))
+              + (manipG[x-1][y] * (-0.1)) + (manipG[x][y] * 1.8) + (manipG[x+1][y] * (-0.1))
+              + (manipG[x-1][y+1] * (-0.1)) + (manipG[x][y+1] * (-0.1)) + (manipG[x+1][y+1] * (-0.1));
+    sharpB := (manipB[x-1][y-1] * (-0.1)) + (manipB[x][y-1] * (-0.1)) + (manipB[x+1][y-1] * (-0.1))
+              + (manipB[x-1][y] * (-0.1)) + (manipB[x][y] * 1.8) + (manipB[x+1][y] * (-0.1))
+              + (manipB[x-1][y+1] * (-0.1)) + (manipB[x][y+1] * (-0.1)) + (manipB[x+1][y+1] * (-0.1));
+
+    //Pake ternary operator supaya nilainya ga negatif dan ga lebih dari 255 (Willy)
+    manipR[x,y] := IfThen(sharpR < 0, 0, IfThen(sharpR > 255, 255, Trunc(sharpR)));
+    manipG[x,y] := IfThen(sharpG < 0, 0, IfThen(sharpG > 255, 255, Trunc(sharpG)));
+    manipB[x,y] := IfThen(sharpB < 0, 0, IfThen(sharpB > 255, 255, Trunc(sharpB)));
+
+    image1.Canvas.Pixels[x,y] := RGB(manipR[x,y], manipG[x,y], manipB[x,y]);
+    defaultBrightnessR[x,y] := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessG[x,y] := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessB[x,y] := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
+    //manipR[x,y] := Trunc(sharpR);
+    //manipG[x,y] := Trunc(sharpG);
+    //manipB[x,y] := Trunc(sharpB);
+   end;
   end;
 end;
 
@@ -190,9 +227,9 @@ begin
     manipB[x,y] := 255 - manipB[x,y];
 
     image1.Canvas.Pixels[x,y] := RGB(manipR[x,y], manipG[x,y], manipB[x,y]);
-    defaultBrightnessR[x,y] := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100)));
-    defaultBrightnessG[x,y] := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100)));
-    defaultBrightnessB[x,y] := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100)));
+    defaultBrightnessR[x,y] := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessG[x,y] := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessB[x,y] := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
    end;
   end;
 
