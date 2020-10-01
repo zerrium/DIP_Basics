@@ -5,6 +5,8 @@ Developed using Lazarus IDE 2.0.10 on Windows
 * Windows
 * Linux (Requires some changes)
 
+
+# For My Teammate:
 ## How to contribute (Windows users, easy):
 ### Part 1: Setup
 * Use GitHub Desktop app, download [here](https://desktop.github.com/)
