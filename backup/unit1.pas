@@ -14,6 +14,8 @@ type
 
   TForm1 = class(TForm)
     brightnessLabel: TLabel;
+    ButtonEdge: TButton;
+    ButtonContrast: TButton;
     sharpenButton: TButton;
     resetButton: TButton;
     ButtonInvers: TButton;
@@ -28,6 +30,8 @@ type
     Image1: TImage;
     SavePictureDialog1: TSavePictureDialog;
     TrackBarBrightness: TTrackBar;
+    procedure ButtonContrastClick(Sender: TObject);
+    procedure ButtonEdgeClick(Sender: TObject);
     procedure ButtonInversClick(Sender: TObject);
     procedure ButtonSmoothClick(Sender: TObject);
     procedure loadButtonClick(Sender: TObject);
@@ -127,9 +131,6 @@ begin
     defaultBrightnessR[x,y] := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
     defaultBrightnessG[x,y] := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
     defaultBrightnessB[x,y] := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
-    //manipR[x,y] := Trunc(sharpR);
-    //manipG[x,y] := Trunc(sharpG);
-    //manipB[x,y] := Trunc(sharpB);
    end;
   end;
 end;
@@ -233,6 +234,113 @@ begin
    end;
   end;
 
+end;
+
+procedure TForm1.ButtonContrastClick(Sender: TObject);
+var
+  x, y, contrast : integer;
+  factor, newRed, newGreen, newBlue : real;
+begin
+  contrast := -128;
+  factor := (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+  // copy of integer
+  for y := 0 to image1.Height-1 do
+  begin
+       for x := 0 to image1.Width-1 do
+       begin
+            newRed   := manipR[x,y];
+            newGreen := manipG[x,y];
+            newBlue  := manipB[x,y];
+
+            newRed   := (factor * (newRed - 128) + 128);
+            newGreen := (factor * (newGreen - 128) + 128);
+            newBlue  := (factor * (newBlue - 128) + 128);
+
+            if newRed > 255 then newRed := 255 else if newRed < 0 then newRed := 0;
+            if newGreen > 255 then newGreen := 255 else if newGreen < 0 then newGreen := 0;
+            if newBlue > 255 then newBlue := 255 else if newBlue < 0 then newBlue := 0;
+
+            Image1.Canvas.Pixels[x,y] := RGB(Trunc(newRed), Trunc(newGreen), Trunc(newBlue));
+
+            defaultBrightnessR[x,y] := Trunc(newRed/((100 + TrackBarBrightness.Position)/100));
+            defaultBrightnessG[x,y] := Trunc(newGreen/((100 + TrackBarBrightness.Position)/100));
+            defaultBrightnessB[x,y] := Trunc(newBlue/((100 + TrackBarBrightness.Position)/100));
+
+            manipR[x,y] := Trunc(newRed);
+            manipG[x,y] := Trunc(newGreen);
+            manipB[x,y] := Trunc(newBlue);
+       end;
+  end;
+end;
+
+procedure TForm1.ButtonEdgeClick(Sender: TObject);
+var
+  grey : array[0..1000,0..1000] of integer;
+  sobelx, sobely : array [0..3,0..3] of integer;
+  sblx, sbly, sbl : integer;
+begin
+  // SOBEL X
+  sobelx[0,0] := -1;
+  sobelx[0,1] := 0;
+  sobelx[0,2] := 1;
+
+  sobelx[1,0] := -2;
+  sobelx[1,1] := 0;
+  sobelx[1,2] := 2;
+
+  sobelx[2,0] := -1;
+  sobelx[2,1] := 0;
+  sobelx[2,2] := 1;
+
+  // SOBEL Y
+  sobely[0,0] := -1;
+  sobely[0,1] := -2;
+  sobely[0,2] := -1;
+
+  sobely[1,0] := 0;
+  sobely[1,1] := 0;
+  sobely[1,2] := 0;
+
+  sobely[2,0] := 1;
+  sobely[2,1] := 2;
+  sobely[2,2] := 1;
+
+  // Grayscalling
+  for j := 0 to Image1.Height-1 do
+  begin
+       for i := 0 to Image1.Width-1 do
+       begin
+            grey[i,j] := (bitmapR[i,j] + bitmapG[i,j] + bitmapB[i,j]) div 3;
+       end;
+  end;
+
+  for j := 0 to Image1.Height-1 do
+  begin
+       for i := 0 to Image1.Width-1 do
+       begin
+            // SOBEL X
+            sblx := (grey[i-1,j-1] * sobelx[0,0]) + (grey[i,j-1] * sobelx[0,1]) + (grey[i+1,j-1] * sobelx[0,2])
+                   + (grey[i-1,j] * sobelx[1,0]) + (grey[i,j] * sobelx[1,1]) + (grey[i+1,j] * sobelx[1,2])
+                   + (grey[i-1,j+1] * sobelx[2,0]) + (grey[i,j+1] * sobelx[2,1]) + (grey[i+1,j+1] * sobelx[2,2]);
+
+            // SOBEL Y
+            sbly := (grey[i-1,j-1] * sobely[0,0]) + (grey[i,j-1] * sobely[0,1]) + (grey[i+1,j-1] * sobely[0,2])
+                   + (grey[i-1,j] * sobely[1,0]) + (grey[i,j] * sobely[1,1]) + (grey[i+1,j] * sobely[1,2])
+                   + (grey[i-1,j+1] * sobely[2,0]) + (grey[i,j+1] * sobely[2,1]) + (grey[i+1,j+1] * sobely[2,2]);
+
+            // Callibrating
+            if sblx > 255 then sblx := 255 else
+            if sblx < 0 then sblx := 0 else sblx := round(sblx);
+
+            if sbly > 255 then sbly := 255 else
+            if sbly < 0 then sbly := 0 else sbly := round(sbly);
+
+            sbl := round(sqrt((sblx * sblx) + (sbly * sbly)));
+
+            Image1.Canvas.Pixels[i,j] := RGB(sbl, sbl, sbl);
+       end;
+  end;
 end;
 
 end.

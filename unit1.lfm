@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 745
+  Left = 793
   Height = 572
-  Top = 151
+  Top = 188
   Width = 818
   Caption = 'Form1'
   ClientHeight = 572
@@ -176,6 +176,38 @@ object Form1: TForm1
     OnClick = sharpenButtonClick
     ParentFont = False
     TabOrder = 7
+  end
+  object ButtonContrast: TButton
+    Left = 544
+    Height = 54
+    Top = 496
+    Width = 158
+    Caption = 'Contrast'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -20
+    Font.Name = 'Segoe UI'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = ButtonContrastClick
+    ParentFont = False
+    TabOrder = 8
+  end
+  object ButtonEdge: TButton
+    Left = 456
+    Height = 54
+    Top = 352
+    Width = 158
+    Caption = 'Edge Detection'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -20
+    Font.Name = 'Segoe UI'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = ButtonEdgeClick
+    ParentFont = False
+    TabOrder = 9
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 624
