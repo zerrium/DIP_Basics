@@ -72,7 +72,7 @@ begin
       for x:=0 to image1.Width-1 do
       begin
         image1.Canvas.Pixels[x,y] := RGB(defaultBrightnessR[x,y], defaultBrightnessG[x,y], defaultBrightnessB[x,y]);
-        manipR[x,y] := IfThen(defaultBrightnessR[x,y] < 0, 0, IfThen(defaultBrightnessR[x,y] > 255, 255, defaultBrightnessR[x,y]));;
+        manipR[x,y] := defaultBrightnessR[x,y];
         manipG[x,y] := defaultBrightnessG[x,y];
         manipB[x,y] := defaultBrightnessB[x,y];
       end;
@@ -111,7 +111,7 @@ end;
 
 procedure TForm1.sharpenButtonClick(Sender: TObject);
 var
-  x, y  : integer;
+  x, y, dbr, dbg, dbb  : integer;
   sharpR, sharpG, sharpB : double;
 begin
   for y:= 0 to image1.height-1 do
@@ -134,9 +134,12 @@ begin
     manipB[x,y] := IfThen(sharpB < 0, 0, IfThen(sharpB > 255, 255, Trunc(sharpB)));
 
     image1.Canvas.Pixels[x,y] := RGB(manipR[x,y], manipG[x,y], manipB[x,y]);
-    defaultBrightnessR[x,y] := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
-    defaultBrightnessG[x,y] := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
-    defaultBrightnessB[x,y] := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
+    dbr := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
+    dbg := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
+    dbb := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessR[x,y] := IfThen(dbr < 0, 0, IfThen(dbr > 255, 255, Trunc(dbr)));
+    defaultBrightnessG[x,y] := IfThen(dbg < 0, 0, IfThen(dbg > 255, 255, Trunc(dbr)));
+    defaultBrightnessB[x,y] := IfThen(dbb < 0, 0, IfThen(dbb > 255, 255, Trunc(dbr)));
    end;
   end;
 end;
@@ -192,7 +195,7 @@ end;
 
 procedure TForm1.ButtonSmoothClick(Sender: TObject);
 var
-  x, y  : integer;
+  x, y, dbr, dbg, dbb  : integer;
   gausR, gausG, gausB : double;
 begin
   for y:= 0 to image1.height-1 do
@@ -210,9 +213,12 @@ begin
               + (manipB[x-1][y+1] * 0.075) + (manipB[x][y+1] * 0.124) + (manipB[x+1][y+1] * 0.075);
 
     image1.Canvas.Pixels[x,y] := RGB(Trunc(gausR), Trunc(gausG), Trunc(gausB));
-    defaultBrightnessR[x,y] := Trunc(gausR/((100 + TrackBarBrightness.Position)/100));
-    defaultBrightnessG[x,y] := Trunc(gausG/((100 + TrackBarBrightness.Position)/100));
-    defaultBrightnessB[x,y] := Trunc(gausB/((100 + TrackBarBrightness.Position)/100));
+    dbr := Trunc(gausR/((100 + TrackBarBrightness.Position)/100));
+    dbg := Trunc(gausG/((100 + TrackBarBrightness.Position)/100));
+    dbb := Trunc(gausB/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessR[x,y] := IfThen(dbr < 0, 0, IfThen(dbr > 255, 255, Trunc(dbr)));
+    defaultBrightnessG[x,y] := IfThen(dbg < 0, 0, IfThen(dbg > 255, 255, Trunc(dbg)));
+    defaultBrightnessB[x,y] := IfThen(dbb < 0, 0, IfThen(dbb > 255, 255, Trunc(dbb)));
     manipR[x,y] := Trunc(gausR);
     manipG[x,y] := Trunc(gausG);
     manipB[x,y] := Trunc(gausB);
@@ -223,7 +229,7 @@ end;
 
 procedure TForm1.ButtonInversClick(Sender: TObject);
 var
-  x, y: integer;
+  x, y, dbr, dbg, dbb: integer;
 begin
   for y:= 0 to image1.height-1 do
   begin
@@ -234,9 +240,12 @@ begin
     manipB[x,y] := 255 - manipB[x,y];
 
     image1.Canvas.Pixels[x,y] := RGB(manipR[x,y], manipG[x,y], manipB[x,y]);
-    defaultBrightnessR[x,y] := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
-    defaultBrightnessG[x,y] := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
-    defaultBrightnessB[x,y] := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
+    dbr := Trunc(manipR[x,y]/((100 + TrackBarBrightness.Position)/100));
+    dbg := Trunc(manipG[x,y]/((100 + TrackBarBrightness.Position)/100));
+    dbb := Trunc(manipB[x,y]/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessR[x,y] := IfThen(dbr < 0, 0, IfThen(dbr > 255, 255, Trunc(dbr)));
+    defaultBrightnessG[x,y] := IfThen(dbg < 0, 0, IfThen(dbg > 255, 255, Trunc(dbg)));
+    defaultBrightnessB[x,y] := IfThen(dbb < 0, 0, IfThen(dbb > 255, 255, Trunc(dbb)));
    end;
   end;
 
@@ -244,7 +253,7 @@ end;
 
 procedure TForm1.ButtonContrastClick(Sender: TObject);
 var
-  x, y, contrast : integer;
+  x, y, contrast, dbr, dbg, dbb : integer;
   factor, newRed, newGreen, newBlue : real;
 begin
   contrast := TrackBarContrast.Position;
@@ -269,9 +278,12 @@ begin
 
             Image1.Canvas.Pixels[x,y] := RGB(Trunc(newRed), Trunc(newGreen), Trunc(newBlue));
 
-            defaultBrightnessR[x,y] := Trunc(newRed/((100 + TrackBarBrightness.Position)/100));
-            defaultBrightnessG[x,y] := Trunc(newGreen/((100 + TrackBarBrightness.Position)/100));
-            defaultBrightnessB[x,y] := Trunc(newBlue/((100 + TrackBarBrightness.Position)/100));
+            dbr := Trunc(newRed/((100 + TrackBarBrightness.Position)/100));
+            dbg := Trunc(newGreen/((100 + TrackBarBrightness.Position)/100));
+            dbb := Trunc(newBlue/((100 + TrackBarBrightness.Position)/100));
+            defaultBrightnessR[x,y] := IfThen(dbr < 0, 0, IfThen(dbr > 255, 255, Trunc(dbr)));
+            defaultBrightnessG[x,y] := IfThen(dbg < 0, 0, IfThen(dbg > 255, 255, Trunc(dbg)));
+            defaultBrightnessB[x,y] := IfThen(dbb < 0, 0, IfThen(dbb > 255, 255, Trunc(dbb)));
 
             manipR[x,y] := Trunc(newRed);
             manipG[x,y] := Trunc(newGreen);
