@@ -14,8 +14,12 @@ type
 
   TForm1 = class(TForm)
     brightnessLabel: TLabel;
+    brightnessLabel1: TLabel;
     ButtonEdge: TButton;
     ButtonContrast: TButton;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     sharpenButton: TButton;
     resetButton: TButton;
     ButtonInvers: TButton;
@@ -29,6 +33,7 @@ type
     saveButton: TButton;
     Image1: TImage;
     SavePictureDialog1: TSavePictureDialog;
+    TrackBarContrast: TTrackBar;
     TrackBarBrightness: TTrackBar;
     procedure ButtonContrastClick(Sender: TObject);
     procedure ButtonEdgeClick(Sender: TObject);
@@ -67,7 +72,7 @@ begin
       for x:=0 to image1.Width-1 do
       begin
         image1.Canvas.Pixels[x,y] := RGB(defaultBrightnessR[x,y], defaultBrightnessG[x,y], defaultBrightnessB[x,y]);
-        manipR[x,y] := defaultBrightnessR[x,y];
+        manipR[x,y] := IfThen(defaultBrightnessR[x,y] < 0, 0, IfThen(defaultBrightnessR[x,y] > 255, 255, defaultBrightnessR[x,y]));;
         manipG[x,y] := defaultBrightnessG[x,y];
         manipB[x,y] := defaultBrightnessB[x,y];
       end;
@@ -93,6 +98,7 @@ begin
       end;
     end;
   TrackBarBrightness.Position := 0;
+  TrackBarContrast.Position := 0;
 end;
 
 procedure TForm1.saveButtonClick(Sender: TObject); //save gambar yang udah dimanipulasi
@@ -241,7 +247,7 @@ var
   x, y, contrast : integer;
   factor, newRed, newGreen, newBlue : real;
 begin
-  contrast := -128;
+  contrast := TrackBarContrast.Position;
   factor := (259 * (contrast + 255)) / (255 * (259 - contrast));
 
   // copy of integer
@@ -278,7 +284,7 @@ procedure TForm1.ButtonEdgeClick(Sender: TObject);
 var
   grey : array[0..1000,0..1000] of integer;
   sobelx, sobely : array [0..3,0..3] of integer;
-  sblx, sbly, sbl : integer;
+  sblx, sbly, sbl, i, j : integer;
 begin
   // SOBEL X
   sobelx[0,0] := -1;
