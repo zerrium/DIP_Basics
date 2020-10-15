@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  ExtDlgs, ComCtrls, windows, math, Strutils;
+  ExtDlgs, ComCtrls, Spin, windows, math, Strutils;
 
 type
 
@@ -15,11 +15,14 @@ type
   TForm1 = class(TForm)
     brightnessLabel: TLabel;
     brightnessLabel1: TLabel;
+    ButtonBinary: TButton;
+    ButtonGray: TButton;
     ButtonEdge: TButton;
     ButtonContrast: TButton;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
     sharpenButton: TButton;
     resetButton: TButton;
     ButtonInvers: TButton;
@@ -33,10 +36,13 @@ type
     saveButton: TButton;
     Image1: TImage;
     SavePictureDialog1: TSavePictureDialog;
+    SpinBinary: TSpinEdit;
     TrackBarContrast: TTrackBar;
     TrackBarBrightness: TTrackBar;
+    procedure ButtonBinaryClick(Sender: TObject);
     procedure ButtonContrastClick(Sender: TObject);
     procedure ButtonEdgeClick(Sender: TObject);
+    procedure ButtonGrayClick(Sender: TObject);
     procedure ButtonInversClick(Sender: TObject);
     procedure ButtonSmoothClick(Sender: TObject);
     procedure loadButtonClick(Sender: TObject);
@@ -292,6 +298,25 @@ begin
   end;
 end;
 
+procedure TForm1.ButtonBinaryClick(Sender: TObject);
+var
+  x, y, biner : integer;
+begin
+  for x:= 0 to image1.height-1 do
+  begin
+   for y:= 0 to image1.width-1 do
+   begin
+    biner := (manipR[x,y] + manipG[x,y] + manipB[x,y]) div 3;
+    biner := IfThen(biner < SpinBinary.Value, 0, 255);
+
+    image1.Canvas.Pixels[x,y] := RGB(biner, biner, biner);
+    manipR[x,y] := biner;
+    manipG[x,y] := biner;
+    manipB[x,y] := biner;
+   end;
+  end;
+end;
+
 procedure TForm1.ButtonEdgeClick(Sender: TObject);
 var
   grey : array[0..1000,0..1000] of integer;
@@ -358,6 +383,29 @@ begin
 
             Image1.Canvas.Pixels[i,j] := RGB(sbl, sbl, sbl);
        end;
+  end;
+end;
+
+procedure TForm1.ButtonGrayClick(Sender: TObject);
+var
+  x, y, gray, db : integer;
+begin
+  for x:= 0 to image1.height-1 do
+  begin
+   for y:= 0 to image1.width-1 do
+   begin
+    gray := (manipR[x,y] + manipG[x,y] + manipB[x,y]) div 3;
+
+    image1.Canvas.Pixels[x,y] := RGB(gray, gray, gray);
+    manipR[x,y] := gray;
+    manipG[x,y] := gray;
+    manipB[x,y] := gray;
+
+    db := Trunc(gray/((100 + TrackBarBrightness.Position)/100));
+    defaultBrightnessR[x,y] := IfThen(db < 0, 0, IfThen(db > 255, 255, Trunc(db)));
+    defaultBrightnessG[x,y] := IfThen(db < 0, 0, IfThen(db > 255, 255, Trunc(db)));
+    defaultBrightnessB[x,y] := IfThen(db < 0, 0, IfThen(db > 255, 255, Trunc(db)));
+   end;
   end;
 end;
 
