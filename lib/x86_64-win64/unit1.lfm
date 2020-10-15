@@ -219,6 +219,7 @@ object Form1: TForm1
     Min = -128
     PageSize = 10
     Position = 0
+    ParentFont = False
     TabOrder = 10
   end
   object brightnessLabel1: TLabel
@@ -286,25 +287,28 @@ object Form1: TForm1
     Width = 94
     Caption = 'Binary'
     OnClick = ButtonBinaryClick
+    ParentFont = False
     TabOrder = 12
   end
   object SpinBinary: TSpinEdit
     Left = 400
     Height = 28
-    Top = 373
-    Width = 93
+    Top = 372
+    Width = 92
     MaxValue = 254
     MinValue = 1
+    ParentFont = False
     TabOrder = 13
     Value = 128
   end
   object Label7: TLabel
-    Left = 403
+    Left = 402
     Height = 40
     Top = 332
     Width = 87
     Caption = 'Binary Image'#13#10'Threshold'
     ParentColor = False
+    ParentFont = False
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 624
