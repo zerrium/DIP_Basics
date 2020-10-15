@@ -302,9 +302,9 @@ procedure TForm1.ButtonBinaryClick(Sender: TObject);
 var
   x, y, biner : integer;
 begin
-  for x:= 0 to image1.height-1 do
+  for y:= 0 to image1.height-1 do
   begin
-   for y:= 0 to image1.width-1 do
+   for x:= 0 to image1.width-1 do
    begin
     biner := (manipR[x,y] + manipG[x,y] + manipB[x,y]) div 3;
     biner := IfThen(biner < SpinBinary.Value, 0, 255);
@@ -390,9 +390,9 @@ procedure TForm1.ButtonGrayClick(Sender: TObject);
 var
   x, y, gray, db : integer;
 begin
-  for x:= 0 to image1.height-1 do
+  for y:= 0 to image1.height-1 do
   begin
-   for y:= 0 to image1.width-1 do
+   for x:= 0 to image1.width-1 do
    begin
     gray := (manipR[x,y] + manipG[x,y] + manipB[x,y]) div 3;
 
