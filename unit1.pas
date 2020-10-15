@@ -209,13 +209,13 @@ begin
    for x:= 0 to image1.width-1 do
    begin
     gausR := (manipR[x-1][y-1] * 0.075) + (manipR[x][y-1] * 0.124) + (manipR[x+1][y-1] * 0.075)
-              + (manipR[x-1][y] * 0.075) + (manipR[x][y] * 0.124) + (manipR[x+1][y] * 0.075)
+              + (manipR[x-1][y] * 0.124) + (manipR[x][y] * 0.204) + (manipR[x+1][y] * 0.124)
               + (manipR[x-1][y+1] * 0.075) + (manipR[x][y+1] * 0.124) + (manipR[x+1][y+1] * 0.075);
     gausG := (manipG[x-1][y-1] * 0.075) + (manipG[x][y-1] * 0.124) + (manipG[x+1][y-1] * 0.075)
-              + (manipG[x-1][y] * 0.075) + (manipG[x][y] * 0.124) + (manipG[x+1][y] * 0.075)
+              + (manipG[x-1][y] * 0.124) + (manipG[x][y] * 0.204) + (manipG[x+1][y] * 0.124)
               + (manipG[x-1][y+1] * 0.075) + (manipG[x][y+1] * 0.124) + (manipG[x+1][y+1] * 0.075);
     gausB := (manipB[x-1][y-1] * 0.075) + (manipB[x][y-1] * 0.124) + (manipB[x+1][y-1] * 0.075)
-              + (manipB[x-1][y] * 0.075) + (manipB[x][y] * 0.124) + (manipB[x+1][y] * 0.075)
+              + (manipB[x-1][y] * 0.0124) + (manipB[x][y] * 0.204) + (manipB[x+1][y] * 0.124)
               + (manipB[x-1][y+1] * 0.075) + (manipB[x][y+1] * 0.124) + (manipB[x+1][y+1] * 0.075);
 
     image1.Canvas.Pixels[x,y] := RGB(Trunc(gausR), Trunc(gausG), Trunc(gausB));
